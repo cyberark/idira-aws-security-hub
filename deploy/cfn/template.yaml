@@ -1,0 +1,191 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Idira Audit → AWS Security Hub ETL.
+  Deploys a scheduled Lambda function that fetches Idira audit events
+  and imports them as OCSF findings into Security Hub via BatchImportFindingsV2.
+
+# ── Parameters ──────────────────────────────────────────────────────────────
+Parameters:
+
+  ArtifactsBucket:
+    Type: String
+    Description: >
+      S3 bucket containing the Lambda deployment zip. The bucket must be in
+      the same region as this stack.
+
+  ArtifactsKey:
+    Type: String
+    Default: idira-audit-securityhub.zip
+    Description: S3 key of the Lambda deployment package.
+
+  ScheduleExpression:
+    Type: String
+    Default: rate(1 hour)
+    Description: >
+      EventBridge schedule expression controlling how often the Lambda runs.
+      Examples: rate(1 hour), rate(30 minutes), cron(0 * * * ? *).
+
+  ApplicationCodes:
+    Type: String
+    Default: ""
+    Description: >
+      Comma-separated Idira application codes to filter (e.g. PAM,EPM,ITDR).
+      Leave empty to fetch events for all applications.
+
+  ExistingSecretArn:
+    Type: String
+    Default: ""
+    Description: >
+      ARN of an existing Secrets Manager secret that contains Idira API
+      credentials. Leave empty to create a placeholder secret (fill in the
+      values after deployment before invoking the Lambda).
+
+# ── Conditions ───────────────────────────────────────────────────────────────
+Conditions:
+  CreateSecret: !Equals [!Ref ExistingSecretArn, ""]
+
+# ── Resources ────────────────────────────────────────────────────────────────
+Resources:
+
+  # --------------------------------------------------------------------------
+  # Secrets Manager – Idira API credentials
+  # --------------------------------------------------------------------------
+  IdiraSecret:
+    Type: AWS::SecretsManager::Secret
+    Condition: CreateSecret
+    Properties:
+      Name: !Sub /idira-audit/${AWS::StackName}/credentials
+      Description: Idira Audit API credentials for the Security Hub ETL.
+      SecretString: !Sub |
+        {
+          "api_base_url":  "https://REPLACE_ME.cyberark.cloud",
+          "identity_url":  "https://REPLACE_ME.id.cyberark.cloud",
+          "client_id":     "REPLACE_ME",
+          "client_secret": "REPLACE_ME",
+          "web_app":       "REPLACE_ME",
+          "api_key":       "REPLACE_ME"
+        }
+
+  # --------------------------------------------------------------------------
+  # SSM Parameter – run cursor (last successful run timestamp)
+  # --------------------------------------------------------------------------
+  RunCursorParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /idira-audit/${AWS::StackName}/cursor
+      Type: String
+      Value: "UNSET"
+      Description: >
+        Last-run timestamp cursor for the Idira Audit ETL.
+        Automatically updated after each successful Lambda run.
+
+  # --------------------------------------------------------------------------
+  # IAM Role
+  # --------------------------------------------------------------------------
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub idira-audit-lambda-role-${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: IdiraAuditETLPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: SecurityHubImportV2
+                Effect: Allow
+                Action: securityhub:BatchImportFindingsV2
+                Resource: "*"
+              - Sid: SSMCursor
+                Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:PutParameter
+                Resource: !Sub >-
+                  arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/idira-audit/${AWS::StackName}/cursor
+              - Sid: SecretsManagerRead
+                Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !If
+                  - CreateSecret
+                  - !Ref IdiraSecret
+                  - !Ref ExistingSecretArn
+
+  # --------------------------------------------------------------------------
+  # Lambda Function
+  # --------------------------------------------------------------------------
+  ETLFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub idira-audit-securityhub-${AWS::StackName}
+      Description: Fetches Idira audit events and imports them into AWS Security Hub.
+      Handler: handler.handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 300
+      MemorySize: 256
+      Code:
+        S3Bucket: !Ref ArtifactsBucket
+        S3Key: !Ref ArtifactsKey
+      Environment:
+        Variables:
+          PYTHONPATH: /var/task
+          AWS_DATA_PATH: /var/task/botocore/data
+          IDIRA_SECRET_ARN: !If
+            - CreateSecret
+            - !Ref IdiraSecret
+            - !Ref ExistingSecretArn
+          CURSOR_SSM_PARAM: !Ref RunCursorParameter
+          AWS_ACCOUNT_ID: !Ref AWS::AccountId
+          APPLICATION_CODES: !Ref ApplicationCodes
+
+  # --------------------------------------------------------------------------
+  # EventBridge Schedule
+  # --------------------------------------------------------------------------
+  ScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub idira-audit-schedule-${AWS::StackName}
+      Description: Triggers the Idira Audit → Security Hub ETL Lambda.
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Id: IdiraAuditETLTarget
+          Arn: !GetAtt ETLFunction.Arn
+
+  SchedulePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ETLFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt ScheduleRule.Arn
+
+# ── Outputs ───────────────────────────────────────────────────────────────────
+Outputs:
+
+  LambdaFunctionName:
+    Description: Name of the deployed Lambda function.
+    Value: !Ref ETLFunction
+
+  LambdaFunctionArn:
+    Description: ARN of the deployed Lambda function.
+    Value: !GetAtt ETLFunction.Arn
+
+  SecretArn:
+    Description: >
+      ARN of the Secrets Manager secret containing Idira credentials.
+      Update the secret values before invoking the Lambda.
+    Value: !If [CreateSecret, !Ref IdiraSecret, !Ref ExistingSecretArn]
+
+  CursorParameterName:
+    Description: SSM Parameter name used to store the run cursor.
+    Value: !Ref RunCursorParameter
