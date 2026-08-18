@@ -1,1 +1,0 @@
-# idira-aws-security-hub
