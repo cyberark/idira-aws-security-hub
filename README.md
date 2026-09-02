@@ -79,6 +79,13 @@ Generate or retrieve the API key from **Audit → Integrations → SIEM** in the
 
 ## AWS Side – Infrastructure Deployment
 
+> **Interim packaging note.** This version of the integration ships a
+> **pre-built dependency package** (`deploy/lambda-deps.zip`) instead of
+> installing dependencies at deploy time. It relies on a preview-specific
+> Security Hub API (`BatchImportFindingsV2` / `GetFindingsV2`) whose SDK build
+> is not yet on PyPI, so dependencies are vendored and pre-packaged. This is an
+> interim measure until that API goes GA. See [`deploy/README.md`](deploy/README.md).
+
 Both **CloudFormation** and **Terraform** options create identical resources:
 
 | Resource | Name pattern |
@@ -105,7 +112,7 @@ The `deploy/build.sh` script packages the Lambda, uploads it to S3, and deploys 
 ```
 
 **What the script does:**
-1. `pip install` runtime dependencies into a temp build directory.
+1. Unpacks the pre-built dependency archive (`deploy/lambda-deps.zip`) into a temp build directory — no `pip install` at deploy time (see the interim packaging note above).
 2. Packages `lambda/` (excluding tests, `.env`, generated JSON/CSV) into `deploy/idira-audit-securityhub.zip`.
 3. Uploads the zip to the S3 bucket.
 4. Runs `aws cloudformation deploy` with `CAPABILITY_NAMED_IAM`.

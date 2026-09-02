@@ -20,6 +20,7 @@ LAMBDA_DIR="$REPO_ROOT/lambda"
 DEPLOY_DIR="$REPO_ROOT/deploy"
 ZIP_NAME="idira-audit-securityhub.zip"
 ZIP_PATH="$DEPLOY_DIR/$ZIP_NAME"
+DEPS_ZIP="$DEPLOY_DIR/lambda-deps.zip"
 
 PROFILE_ARGS=()
 if [[ -n "$PROFILE" ]]; then
@@ -30,13 +31,18 @@ echo "==> Building Lambda package..."
 BUILD_DIR="$(mktemp -d)"
 trap 'rm -rf "$BUILD_DIR"' EXIT
 
-# Install Python dependencies into the build directory
-pip install \
-  -r "$REPO_ROOT/requirements.txt" \
-  --find-links "$REPO_ROOT/vendor" \
-  -t "$BUILD_DIR/" \
-  --quiet \
-  --upgrade
+# Unpack the pre-packaged dependencies. We deliberately DO NOT run pip here:
+# this project needs a preview boto3/botocore build (BatchImportFindingsV2 /
+# GetFindingsV2) that is not on PyPI and whose version number collides with a
+# different GA wheel. deploy/lambda-deps.zip is built offline by make_deps.sh
+# from the vendored wheels. Regenerate it with ./deploy/make_deps.sh when the
+# dependencies change.
+if [[ ! -f "$DEPS_ZIP" ]]; then
+  echo "ERROR: $DEPS_ZIP not found. Run ./deploy/make_deps.sh first." >&2
+  exit 1
+fi
+echo "    Unpacking pre-packaged dependencies from $(basename "$DEPS_ZIP")..."
+unzip -q "$DEPS_ZIP" -d "$BUILD_DIR/"
 
 # Copy Lambda source (exclude local-only files)
 rsync -a \

@@ -1,0 +1,377 @@
+[
+  {
+    "class_uid": 2004,
+    "category_uid": 2,
+    "activity_id": 1,
+    "activity_name": "Create",
+    "type_uid": 200401,
+    "severity_id": 1,
+    "severity": "Informational",
+    "time": 1785513929372,
+    "message": "Security alert Suspicious activities in a privileged session has been reported.",
+    "metadata": {
+      "version": "1.8.0",
+      "profiles": [
+        "cloud",
+        "datetime"
+      ],
+      "product": {
+        "name": "Idira Audit",
+        "vendor_name": "Palo Alto Networks",
+        "uid": "arn:aws:securityhub:us-east-1::productv2/e74c7eec-1d4f-4601-98cd-f22ffd268b0f"
+      }
+    },
+    "finding_info": {
+      "uid": "618cfe50-1356-481d-9c79-9c8bbb34264a",
+      "title": "Idira Audit: Create [ITDR]",
+      "types": [
+        "Software and Configuration Checks/Industry and Regulatory Standards"
+      ],
+      "created_time": 1785419063000,
+      "modified_time": 1785513929372,
+      "desc": "Security alert Suspicious activities in a privileged session has been reported.",
+      "analytic": {
+        "name": "Idira/ITDR/ITDR0001",
+        "uid": "ITDR0001",
+        "type_id": 1
+      }
+    },
+    "confidence_id": 3,
+    "resources": [
+      {
+        "uid": "arn:aws:iam::059437863934:root",
+        "type": "AWS::::Account",
+        "cloud_partition": "aws",
+        "region": "us-east-1",
+        "owner": {
+          "account": {
+            "uid": "059437863934"
+          }
+        }
+      }
+    ],
+    "cloud": {
+      "provider": "AWS",
+      "account": {
+        "uid": "059437863934"
+      },
+      "region": "us-east-1"
+    },
+    "unmapped": {
+      "tenantId": "00000000-0000-4000-8000-000000000000",
+      "applicationCode": "ITDR",
+      "auditCode": "ITDR0001",
+      "auditType": "Info",
+      "actionType": "Create",
+      "component": "Suspicious activities in a privileged session",
+      "serviceName": "Threat Detection and Response",
+      "username": "alex.morgan@demo-corp.example",
+      "userId": "11111111-1111-4111-8111-111111111111",
+      "identityType": "HUMAN",
+      "sessionId": "be9a085f-20d7-4977-bb84-5b03df893372",
+      "source": "203.0.113.10",
+      "target": "i-0abc123def4567890",
+      "correlationId": "b51dea91-c049-4757-9427-420086cbf1a4"
+    }
+  },
+  {
+    "class_uid": 2004,
+    "category_uid": 2,
+    "activity_id": 1,
+    "activity_name": "Create",
+    "type_uid": 200401,
+    "severity_id": 1,
+    "severity": "Informational",
+    "time": 1785513929372,
+    "message": "Security alert Impossible Travel Sign-in has been reported.",
+    "metadata": {
+      "version": "1.8.0",
+      "profiles": [
+        "cloud",
+        "datetime"
+      ],
+      "product": {
+        "name": "Idira Audit",
+        "vendor_name": "Palo Alto Networks",
+        "uid": "arn:aws:securityhub:us-east-1::productv2/e74c7eec-1d4f-4601-98cd-f22ffd268b0f"
+      }
+    },
+    "finding_info": {
+      "uid": "699ceeab-78c1-4bc0-8432-26cf4f4dcd58",
+      "title": "Idira Audit: Create [ITDR]",
+      "types": [
+        "Software and Configuration Checks/Industry and Regulatory Standards"
+      ],
+      "created_time": 1785419704000,
+      "modified_time": 1785513929372,
+      "desc": "Security alert Impossible Travel Sign-in has been reported.",
+      "analytic": {
+        "name": "Idira/ITDR/ITDR0001",
+        "uid": "ITDR0001",
+        "type_id": 1
+      }
+    },
+    "confidence_id": 3,
+    "resources": [
+      {
+        "uid": "arn:aws:iam::059437863934:root",
+        "type": "AWS::::Account",
+        "cloud_partition": "aws",
+        "region": "us-east-1",
+        "owner": {
+          "account": {
+            "uid": "059437863934"
+          }
+        }
+      }
+    ],
+    "cloud": {
+      "provider": "AWS",
+      "account": {
+        "uid": "059437863934"
+      },
+      "region": "us-east-1"
+    },
+    "unmapped": {
+      "tenantId": "00000000-0000-4000-8000-000000000000",
+      "applicationCode": "ITDR",
+      "auditCode": "ITDR0001",
+      "auditType": "Info",
+      "actionType": "Create",
+      "component": "Impossible Travel Sign-in",
+      "serviceName": "Threat Detection and Response",
+      "username": "jordan.lee@demo-corp.example",
+      "userId": "22222222-2222-4222-8222-222222222222",
+      "identityType": "HUMAN",
+      "sessionId": "d43fae36-c1e3-4804-877a-026290fdd861",
+      "source": "203.0.113.20",
+      "target": "N/A",
+      "correlationId": "485117fa-2f5b-5083-a5d6-6643685667d8"
+    }
+  },
+  {
+    "class_uid": 2004,
+    "category_uid": 2,
+    "activity_id": 1,
+    "activity_name": "Create",
+    "type_uid": 200401,
+    "severity_id": 1,
+    "severity": "Informational",
+    "time": 1785513929372,
+    "message": "Security alert Suspicious activities in a privileged session has been reported.",
+    "metadata": {
+      "version": "1.8.0",
+      "profiles": [
+        "cloud",
+        "datetime"
+      ],
+      "product": {
+        "name": "Idira Audit",
+        "vendor_name": "Palo Alto Networks",
+        "uid": "arn:aws:securityhub:us-east-1::productv2/e74c7eec-1d4f-4601-98cd-f22ffd268b0f"
+      }
+    },
+    "finding_info": {
+      "uid": "8c6055f5-c7c2-40b6-a6f3-c9cad8cfdca1",
+      "title": "Idira Audit: Create [ITDR]",
+      "types": [
+        "Software and Configuration Checks/Industry and Regulatory Standards"
+      ],
+      "created_time": 1785419734000,
+      "modified_time": 1785513929372,
+      "desc": "Security alert Suspicious activities in a privileged session has been reported.",
+      "analytic": {
+        "name": "Idira/ITDR/ITDR0001",
+        "uid": "ITDR0001",
+        "type_id": 1
+      }
+    },
+    "confidence_id": 3,
+    "resources": [
+      {
+        "uid": "arn:aws:iam::059437863934:root",
+        "type": "AWS::::Account",
+        "cloud_partition": "aws",
+        "region": "us-east-1",
+        "owner": {
+          "account": {
+            "uid": "059437863934"
+          }
+        }
+      }
+    ],
+    "cloud": {
+      "provider": "AWS",
+      "account": {
+        "uid": "059437863934"
+      },
+      "region": "us-east-1"
+    },
+    "unmapped": {
+      "tenantId": "00000000-0000-4000-8000-000000000000",
+      "applicationCode": "ITDR",
+      "auditCode": "ITDR0001",
+      "auditType": "Info",
+      "actionType": "Create",
+      "component": "Suspicious activities in a privileged session",
+      "serviceName": "Threat Detection and Response",
+      "username": "jordan.lee@demo-corp.example",
+      "userId": "22222222-2222-4222-8222-222222222222",
+      "identityType": "HUMAN",
+      "sessionId": "3564655b-8356-47c3-858d-46d83b74d6e1",
+      "source": "203.0.113.20",
+      "target": "i-0abc123def4567890",
+      "correlationId": "472aa377-dd70-490b-a580-beace0758ce5"
+    }
+  },
+  {
+    "class_uid": 2004,
+    "category_uid": 2,
+    "activity_id": 1,
+    "activity_name": "Create",
+    "type_uid": 200401,
+    "severity_id": 1,
+    "severity": "Informational",
+    "time": 1785513929372,
+    "message": "Security alert Impossible Travel Sign-in has been reported.",
+    "metadata": {
+      "version": "1.8.0",
+      "profiles": [
+        "cloud",
+        "datetime"
+      ],
+      "product": {
+        "name": "Idira Audit",
+        "vendor_name": "Palo Alto Networks",
+        "uid": "arn:aws:securityhub:us-east-1::productv2/e74c7eec-1d4f-4601-98cd-f22ffd268b0f"
+      }
+    },
+    "finding_info": {
+      "uid": "f3615d1a-cd88-407c-b264-155175b3115c",
+      "title": "Idira Audit: Create [ITDR]",
+      "types": [
+        "Software and Configuration Checks/Industry and Regulatory Standards"
+      ],
+      "created_time": 1785420289000,
+      "modified_time": 1785513929372,
+      "desc": "Security alert Impossible Travel Sign-in has been reported.",
+      "analytic": {
+        "name": "Idira/ITDR/ITDR0001",
+        "uid": "ITDR0001",
+        "type_id": 1
+      }
+    },
+    "confidence_id": 3,
+    "resources": [
+      {
+        "uid": "arn:aws:iam::059437863934:root",
+        "type": "AWS::::Account",
+        "cloud_partition": "aws",
+        "region": "us-east-1",
+        "owner": {
+          "account": {
+            "uid": "059437863934"
+          }
+        }
+      }
+    ],
+    "cloud": {
+      "provider": "AWS",
+      "account": {
+        "uid": "059437863934"
+      },
+      "region": "us-east-1"
+    },
+    "unmapped": {
+      "tenantId": "00000000-0000-4000-8000-000000000000",
+      "applicationCode": "ITDR",
+      "auditCode": "ITDR0001",
+      "auditType": "Info",
+      "actionType": "Create",
+      "component": "Impossible Travel Sign-in",
+      "serviceName": "Threat Detection and Response",
+      "username": "jordan.lee@demo-corp.example",
+      "userId": "22222222-2222-4222-8222-222222222222",
+      "identityType": "HUMAN",
+      "sessionId": "b71bb25f-a79d-4c82-8c0b-fc903333dbb4",
+      "source": "203.0.113.30",
+      "target": "N/A",
+      "correlationId": "54768d14-62a0-59cb-9dc7-687e339f47be"
+    }
+  },
+  {
+    "class_uid": 2004,
+    "category_uid": 2,
+    "activity_id": 1,
+    "activity_name": "Create",
+    "type_uid": 200401,
+    "severity_id": 1,
+    "severity": "Informational",
+    "time": 1785513929372,
+    "message": "Security alert Anomalous Sign In has been reported.",
+    "metadata": {
+      "version": "1.8.0",
+      "profiles": [
+        "cloud",
+        "datetime"
+      ],
+      "product": {
+        "name": "Idira Audit",
+        "vendor_name": "Palo Alto Networks",
+        "uid": "arn:aws:securityhub:us-east-1::productv2/e74c7eec-1d4f-4601-98cd-f22ffd268b0f"
+      }
+    },
+    "finding_info": {
+      "uid": "d8d82f72-5a22-4248-827d-e3c3096137b5",
+      "title": "Idira Audit: Create [ITDR]",
+      "types": [
+        "Software and Configuration Checks/Industry and Regulatory Standards"
+      ],
+      "created_time": 1785415065000,
+      "modified_time": 1785513929372,
+      "desc": "Security alert Anomalous Sign In has been reported.",
+      "analytic": {
+        "name": "Idira/ITDR/ITDR0001",
+        "uid": "ITDR0001",
+        "type_id": 1
+      }
+    },
+    "confidence_id": 3,
+    "resources": [
+      {
+        "uid": "arn:aws:iam::059437863934:root",
+        "type": "AWS::::Account",
+        "cloud_partition": "aws",
+        "region": "us-east-1",
+        "owner": {
+          "account": {
+            "uid": "059437863934"
+          }
+        }
+      }
+    ],
+    "cloud": {
+      "provider": "AWS",
+      "account": {
+        "uid": "059437863934"
+      },
+      "region": "us-east-1"
+    },
+    "unmapped": {
+      "tenantId": "00000000-0000-4000-8000-000000000000",
+      "applicationCode": "ITDR",
+      "auditCode": "ITDR0001",
+      "auditType": "Info",
+      "actionType": "Create",
+      "component": "Anomalous Sign In",
+      "serviceName": "Threat Detection and Response",
+      "username": "sam.rivera@demo-corp.example",
+      "userId": "33333333-3333-4333-8333-333333333333",
+      "identityType": "HUMAN",
+      "sessionId": "N/A",
+      "source": "203.0.113.40",
+      "target": "CyberArk Identity",
+      "correlationId": "2789d7db-dcb4-54df-9848-ed154a579fd6"
+    }
+  }
+]

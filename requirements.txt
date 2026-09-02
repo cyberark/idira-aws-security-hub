@@ -1,5 +1,13 @@
 requests==2.32.3
 urllib3==2.2.3
 python-dotenv==1.0.1
-boto3==1.42.49
-botocore==1.42.49
+
+# boto3/botocore are intentionally NOT pinned here.
+# This integration requires a *preview* boto3/botocore 1.42.49 (Security Hub
+# BatchImportFindingsV2 / GetFindingsV2) that is NOT on PyPI — and PyPI has a
+# DIFFERENT wheel with the same 1.42.49 version number, so pinning here would
+# silently install the wrong (GA) build. The preview wheels are vendored in
+# deploy/vendor/ and shipped via the pre-built deploy/lambda-deps.zip.
+# Install them locally with:
+#   pip install --no-index --find-links deploy/vendor boto3 botocore
+# See deploy/README.md.

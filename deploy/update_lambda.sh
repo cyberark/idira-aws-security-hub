@@ -21,6 +21,7 @@ LAMBDA_DIR="$REPO_ROOT/lambda"
 DEPLOY_DIR="$REPO_ROOT/deploy"
 ZIP_NAME="idira-audit-securityhub.zip"
 ZIP_PATH="$DEPLOY_DIR/$ZIP_NAME"
+DEPS_ZIP="$DEPLOY_DIR/lambda-deps.zip"
 FUNCTION_NAME="idira-audit-securityhub-${STACK}"
 
 PROFILE_ARGS=()
@@ -32,12 +33,15 @@ echo "==> Building Lambda package..."
 BUILD_DIR="$(mktemp -d)"
 trap 'rm -rf "$BUILD_DIR"' EXIT
 
-pip install \
-  -r "$REPO_ROOT/requirements.txt" \
-  --find-links "$REPO_ROOT/vendor" \
-  -t "$BUILD_DIR/" \
-  --quiet \
-  --upgrade
+# Unpack the pre-packaged dependencies (no pip at deploy time). See build.sh
+# and deploy/make_deps.sh for why: the required preview boto3/botocore build is
+# not installable from PyPI. Regenerate with ./deploy/make_deps.sh when deps change.
+if [[ ! -f "$DEPS_ZIP" ]]; then
+  echo "ERROR: $DEPS_ZIP not found. Run ./deploy/make_deps.sh first." >&2
+  exit 1
+fi
+echo "    Unpacking pre-packaged dependencies from $(basename "$DEPS_ZIP")..."
+unzip -q "$DEPS_ZIP" -d "$BUILD_DIR/"
 
 rsync -a \
   --exclude='.env' \
